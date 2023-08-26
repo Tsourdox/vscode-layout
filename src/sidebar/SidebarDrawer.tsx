@@ -26,6 +26,7 @@ export default function SidebarDrawer({ children }: Props) {
     >
       {children}
       <DraggableEdge
+        side="right"
         onDrag={(movement) => setWidth((width) => width + movement)}
         onDragEnd={() =>
           setWidth((width) =>
