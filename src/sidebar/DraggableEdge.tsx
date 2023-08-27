@@ -1,15 +1,16 @@
 import clsx from 'clsx';
 import {
   PointerEventHandler,
+  RefObject,
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { clip } from '../utils';
 
 interface Props {
+  containerRef: RefObject<HTMLDivElement>;
   isOpen: boolean;
   direction: 'left' | 'right' | 'top' | 'bottom';
   minSize: number;
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export default function DragEdge({
+  containerRef,
   isOpen,
   direction,
   minSize,
@@ -29,7 +31,6 @@ export default function DragEdge({
   onDrag,
 }: Props) {
   const [isDragging, setIsDragging] = useState(false);
-  const activeValueRef = useRef(value);
 
   const isHorizontal = useMemo(
     () => direction === 'left' || direction === 'right',
@@ -42,12 +43,7 @@ export default function DragEdge({
   );
 
   useEffect(() => {
-    activeValueRef.current = value;
-  }, [value]);
-
-  useEffect(() => {
     const handleResize = () => {
-      activeValueRef.current = clip(activeValueRef.current, minSize, getMax());
       onDrag(clip(value, minSize, getMax()));
     };
 
@@ -63,7 +59,6 @@ export default function DragEdge({
     setIsDragging(true);
 
     if (!isOpen) {
-      activeValueRef.current = 0;
       onDrag(0);
     }
   };
@@ -72,18 +67,32 @@ export default function DragEdge({
     e.currentTarget.releasePointerCapture(e.pointerId);
     window.removeEventListener('selectstart', disableSelect);
     setIsDragging(false);
-    activeValueRef.current = clip(activeValueRef.current, minSize, getMax());
   };
 
   const handlePointerMove: PointerEventHandler<HTMLDivElement> = (e) => {
-    if (!isDragging) return;
-    const movement = isHorizontal ? e.movementX : e.movementY;
-    activeValueRef.current = activeValueRef.current + movement;
+    if (!isDragging || !containerRef.current) return;
 
-    if (foldLimit && activeValueRef.current < foldLimit) {
+    const containerRect = containerRef.current.getBoundingClientRect();
+
+    const opositeSides = {
+      left: containerRect.right,
+      right: containerRect.left,
+      top: containerRect.bottom,
+      bottom: containerRect.top,
+    };
+
+    const offset = opositeSides[direction];
+    const absolutePointerPosition = isHorizontal ? e.clientX : e.clientY;
+    const relativeCursorPosition = absolutePointerPosition - offset;
+
+    if (
+      foldLimit &&
+      ((isOpen && relativeCursorPosition < foldLimit) ||
+        (!isOpen && relativeCursorPosition < minSize - foldLimit))
+    ) {
       onDrag(0);
     } else {
-      onDrag(clip(activeValueRef.current, minSize, getMax()));
+      onDrag(clip(relativeCursorPosition, minSize, getMax()));
     }
   };
 

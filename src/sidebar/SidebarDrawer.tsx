@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ReactNode } from 'react';
+import { ReactNode, useRef } from 'react';
 import DraggableEdge from './DraggableEdge';
 
 interface Props {
@@ -19,9 +19,12 @@ export default function SidebarDrawer({
   onResize,
   children,
 }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
     <aside className="relative flex">
       <div
+        ref={containerRef}
         style={{ width: `${isOpen ? width : 0}px` }}
         className={clsx(
           'flex flex-col overflow-hidden bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-300',
@@ -31,6 +34,7 @@ export default function SidebarDrawer({
         {children}
       </div>
       <DraggableEdge
+        containerRef={containerRef}
         isOpen={isOpen}
         direction="right"
         foldLimit={MIN_WIDTH / 4}
