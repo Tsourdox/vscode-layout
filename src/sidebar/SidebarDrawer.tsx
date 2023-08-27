@@ -13,11 +13,15 @@ export default function SidebarDrawer({ children }: Props) {
   const [width, setWidth] = useState(MIN_WIDTH);
 
   return (
-    <aside
-      style={{ width: `${width}px` }}
-      className="relative flex flex-col dark:text-neutral-300 border-r-1 bg-neutral-100 border-neutral-300 dark:bg-neutral-900 dark:border-neutral-700"
-    >
-      {children}
+    <aside className="relative flex">
+      <div
+        style={{ width: `${width}px` }}
+        className={`flex flex-col overflow-hidden dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-900 ${
+          width && 'border-r-1 border-neutral-300 dark:border-neutral-700'
+        }`}
+      >
+        {children}
+      </div>
       <DraggableEdge
         direction="right"
         foldLimit={MIN_WIDTH / 2}
