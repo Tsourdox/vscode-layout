@@ -18,10 +18,10 @@ export default function Sidebar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleIconClick = () => {
+    setIsDrawerOpen((isOpen) => !isOpen);
     if (!isDrawerOpen && drawerWidth === 0) {
       setDrawerWidth(250);
     }
-    setIsDrawerOpen((isOpen) => !isOpen);
   };
 
   const handleResize = (width: number) => {

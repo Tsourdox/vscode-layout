@@ -24,6 +24,20 @@ export default function DraggableEdge({
   const getMax = () =>
     (isHorizontal ? window.innerWidth : window.innerHeight) - endMargin;
 
+  useEffect(() => {
+    activeValueRef.current = value;
+  }, [value]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      activeValueRef.current = clip(activeValueRef.current, minSize, getMax());
+      onDrag(clip(value, minSize, getMax()));
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  });
+
   const handleMouseDown = () => {
     const disableSelect = (e: Event) => e.preventDefault();
 
@@ -50,16 +64,6 @@ export default function DraggableEdge({
     document.addEventListener('mousemove', handleDrag);
     document.addEventListener('mouseup', handleMouseUp);
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      activeValueRef.current = clip(activeValueRef.current, minSize, getMax());
-      onDrag(clip(value, minSize, getMax()));
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  });
 
   const horizontalClasses = 'top-0 h-full w-1 px-1 cursor-ew-resize';
   const verticalClasses = 'left-0 w-full h-1 py-1 cursor-ns-resize';
