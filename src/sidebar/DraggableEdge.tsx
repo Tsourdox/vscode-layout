@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { clip } from '../utils';
 
 interface Props {
+  isOpen: boolean;
   direction: 'left' | 'right' | 'top' | 'bottom';
   minSize: number;
   foldLimit?: number;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function DraggableEdge({
+  isOpen,
   direction,
   minSize,
   foldLimit,
@@ -40,6 +42,10 @@ export default function DraggableEdge({
 
   const handleMouseDown = () => {
     const disableSelect = (e: Event) => e.preventDefault();
+    if (!isOpen) {
+      activeValueRef.current = 0;
+      onDrag(0);
+    }
 
     const handleDrag = (e: MouseEvent) => {
       const movement = isHorizontal ? e.movementX : e.movementY;
