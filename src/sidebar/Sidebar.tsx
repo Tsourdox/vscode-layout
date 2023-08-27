@@ -14,15 +14,32 @@ import SidebarIcon from './SidebarIcon';
 import Explorer from './drawer-content/Explorer';
 
 export default function Sidebar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [drawerWidth, setDrawerWidth] = useState(0);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleIconClick = () => {
+    if (!isDrawerOpen && drawerWidth === 0) {
+      setDrawerWidth(250);
+    }
+    setIsDrawerOpen((isOpen) => !isOpen);
+  };
+
+  const handleResize = (width: number) => {
+    if (isDrawerOpen && width === 0) {
+      setIsDrawerOpen(false);
+    } else if (!isDrawerOpen && width > 0) {
+      setIsDrawerOpen(true);
+    }
+    setDrawerWidth(width);
+  };
 
   return (
     <>
       <aside className="flex flex-col overflow-y-auto border-r-1 bg-neutral-100 border-neutral-300 dark:bg-neutral-900 dark:border-neutral-700">
         <SidebarIcon
           icon={<DocumentDuplicateIcon />}
-          isActive={isSidebarOpen}
-          onClick={() => setIsSidebarOpen((isOpen) => !isOpen)}
+          isActive={isDrawerOpen}
+          onClick={handleIconClick}
         />
         <SidebarIcon icon={<MagnifyingGlassIcon />} />
         <SidebarIcon icon={<ShareIcon />} />
@@ -33,12 +50,14 @@ export default function Sidebar() {
         <SidebarIcon icon={<UserCircleIcon />} />
         <SidebarIcon icon={<Cog8ToothIcon />} />
       </aside>
-      {isSidebarOpen && (
-        <SidebarDrawer>
-          {/* Explorer hard coded for now... */}
-          <Explorer />
-        </SidebarDrawer>
-      )}
+      <SidebarDrawer
+        isOpen={isDrawerOpen}
+        width={drawerWidth}
+        onResize={handleResize}
+      >
+        {/* Explorer hard coded for now... */}
+        <Explorer />
+      </SidebarDrawer>
     </>
   );
 }
