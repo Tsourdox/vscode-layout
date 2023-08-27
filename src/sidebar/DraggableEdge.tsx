@@ -1,4 +1,11 @@
-import { useEffect, useRef } from 'react';
+import {
+  PointerEventHandler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { clip } from '../utils';
 
 interface Props {
@@ -20,11 +27,18 @@ export default function DraggableEdge({
   value,
   onDrag,
 }: Props) {
+  const [isDragging, setIsDragging] = useState(false);
   const activeValueRef = useRef(value);
-  const isHorizontal = direction === 'left' || direction === 'right';
 
-  const getMax = () =>
-    (isHorizontal ? window.innerWidth : window.innerHeight) - endMargin;
+  const isHorizontal = useMemo(
+    () => direction === 'left' || direction === 'right',
+    [direction]
+  );
+
+  const getMax = useCallback(
+    () => (isHorizontal ? window.innerWidth : window.innerHeight) - endMargin,
+    [endMargin, isHorizontal]
+  );
 
   useEffect(() => {
     activeValueRef.current = value;
@@ -38,37 +52,38 @@ export default function DraggableEdge({
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  });
+  }, [getMax, minSize, onDrag, value]);
 
-  const handleMouseDown = () => {
-    const disableSelect = (e: Event) => e.preventDefault();
+  const disableSelect = useCallback((e: Event) => e.preventDefault(), []);
+
+  const handlePointerDown: PointerEventHandler<HTMLDivElement> = (e) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    window.addEventListener('selectstart', disableSelect);
+    setIsDragging(true);
+
     if (!isOpen) {
       activeValueRef.current = 0;
       onDrag(0);
     }
+  };
 
-    const handleDrag = (e: MouseEvent) => {
-      const movement = isHorizontal ? e.movementX : e.movementY;
-      activeValueRef.current = activeValueRef.current + movement;
+  const handlePointerUp: PointerEventHandler<HTMLDivElement> = (e) => {
+    e.currentTarget.releasePointerCapture(e.pointerId);
+    window.removeEventListener('selectstart', disableSelect);
+    setIsDragging(false);
+    activeValueRef.current = clip(activeValueRef.current, minSize, getMax());
+  };
 
-      if (foldLimit && activeValueRef.current < foldLimit) {
-        onDrag(0);
-      } else {
-        onDrag(clip(activeValueRef.current, minSize, getMax()));
-      }
-    };
+  const handlePointerMove: PointerEventHandler<HTMLDivElement> = (e) => {
+    if (!isDragging) return;
+    const movement = isHorizontal ? e.movementX : e.movementY;
+    activeValueRef.current = activeValueRef.current + movement;
 
-    const handleMouseUp = () => {
-      window.removeEventListener('selectstart', disableSelect);
-      document.removeEventListener('mousemove', handleDrag);
-      document.removeEventListener('mouseup', handleMouseUp);
-
-      activeValueRef.current = clip(activeValueRef.current, minSize, getMax());
-    };
-
-    window.addEventListener('selectstart', disableSelect);
-    document.addEventListener('mousemove', handleDrag);
-    document.addEventListener('mouseup', handleMouseUp);
+    if (foldLimit && activeValueRef.current < foldLimit) {
+      onDrag(0);
+    } else {
+      onDrag(clip(activeValueRef.current, minSize, getMax()));
+    }
   };
 
   const horizontalClasses = 'top-0 h-full w-1 px-1 cursor-ew-resize';
@@ -90,7 +105,9 @@ export default function DraggableEdge({
   return (
     <div
       className={`${classes} box-content absolute bg-clip-content active:bg-blue-700 active:dark:bg-blue-600`}
-      onMouseDown={handleMouseDown}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerMove={handlePointerMove}
     />
   );
 }
