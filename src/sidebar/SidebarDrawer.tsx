@@ -23,7 +23,7 @@ export default function SidebarDrawer({
       <div
         style={{ width: `${isOpen ? width : 0}px` }}
         className={`flex flex-col overflow-hidden dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-900 ${
-          width && 'border-r-1 border-neutral-300 dark:border-neutral-700'
+          isOpen && 'border-r-1 border-neutral-300 dark:border-neutral-700'
         }`}
       >
         {children}
