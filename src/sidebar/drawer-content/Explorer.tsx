@@ -3,10 +3,10 @@ import SidebarDrawerAccordion from '../SidebarDrawerAccordion';
 
 export default function Explorer() {
   return (
-    <section className="flex flex-col flex-1">
-      <header className="flex justify-between py-4 px-7">
+    <section className="flex flex-1 flex-col">
+      <header className="flex justify-between px-7 py-4">
         <span>EXPLORER</span>
-        <EllipsisHorizontalIcon className="w-6 h-6" />
+        <EllipsisHorizontalIcon className="h-6 w-6" />
       </header>
 
       <SidebarDrawerAccordion title="VSCODE-LAYOT">

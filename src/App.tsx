@@ -5,10 +5,10 @@ import Sidebar from './sidebar/Sidebar';
 
 function App() {
   return (
-    <div className="flex flex-col h-full dark:text-neutral-400 text-neutral-500">
+    <div className="flex h-full flex-col text-neutral-500 dark:text-neutral-400">
       <Header />
 
-      <div className="flex flex-1 h-0">
+      <div className="flex h-0 flex-1">
         <Sidebar />
         <Main />
       </div>

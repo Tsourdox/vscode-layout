@@ -3,10 +3,10 @@ import { Kbd } from './Kbd';
 
 export default function Main() {
   return (
-    <main className="flex flex-col items-center justify-center flex-1 text-lg red bg-neutral-50 dark:bg-neutral-850">
-      <PhotoIcon className="-mt-12 w-96 h-96 text-neutral-200 dark:text-neutral-900" />
+    <main className="red dark:bg-neutral-850 flex flex-1 flex-col items-center justify-center bg-neutral-50 text-lg">
+      <PhotoIcon className="-mt-12 h-96 w-96 text-neutral-200 dark:text-neutral-900" />
       <section className="flex gap-6">
-        <div className="grid items-center grid-rows-5 gap-4 grid-cols-2-auto">
+        <div className="grid-cols-2-auto grid grid-rows-5 items-center gap-4">
           <span className="text-right">Show All Commands</span>
           <div className="flex gap-2">
             <Kbd>⇧</Kbd>

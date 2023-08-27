@@ -1,4 +1,5 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+import clsx from 'clsx';
 import { useState } from 'react';
 
 interface Props {
@@ -16,18 +17,20 @@ export default function SidebarDrawerAccordion({
 
   return (
     <section
-      className={`flex flex-col transition-all ${isExpanded && 'flex-1 h-8'} ${
-        !noDivider && 'border-b-1 border-neutral-300 dark:border-neutral-700'
-      }`}
+      className={clsx(
+        'flex flex-col transition-all',
+        isExpanded && 'h-8 flex-1',
+        !noDivider && 'border-b-1 border-neutral-300 dark:border-neutral-700',
+      )}
     >
       <header
-        className="flex items-center p-1 cursor-pointer"
+        className="flex cursor-pointer items-center p-1"
         onClick={() => setIsExpanded((isExpanded) => !isExpanded)}
       >
         {isExpanded ? (
-          <ChevronDownIcon className="w-6 h-6" />
+          <ChevronDownIcon className="h-6 w-6" />
         ) : (
-          <ChevronRightIcon className="w-6 h-6" />
+          <ChevronRightIcon className="h-6 w-6" />
         )}
         <span className="font-semibold">{title}</span>
       </header>

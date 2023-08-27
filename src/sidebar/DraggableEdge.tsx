@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import {
   PointerEventHandler,
   useCallback,
@@ -18,7 +19,7 @@ interface Props {
   onDrag: (value: number) => void;
 }
 
-export default function DraggableEdge({
+export default function DragEdge({
   isOpen,
   direction,
   minSize,
@@ -32,12 +33,12 @@ export default function DraggableEdge({
 
   const isHorizontal = useMemo(
     () => direction === 'left' || direction === 'right',
-    [direction]
+    [direction],
   );
 
   const getMax = useCallback(
     () => (isHorizontal ? window.innerWidth : window.innerHeight) - endMargin,
-    [endMargin, isHorizontal]
+    [endMargin, isHorizontal],
   );
 
   useEffect(() => {
@@ -86,25 +87,17 @@ export default function DraggableEdge({
     }
   };
 
-  const horizontalClasses = 'top-0 h-full w-1 px-1 cursor-ew-resize';
-  const verticalClasses = 'left-0 w-full h-1 py-1 cursor-ns-resize';
-  const rightClasses = `-right-2 ${horizontalClasses}`;
-  const leftClasses = `-left-2 ${horizontalClasses}`;
-  const topClasses = `-top-2 ${verticalClasses}`;
-  const bottomClasses = `-bottom-2 ${verticalClasses}`;
-
-  const classes =
-    direction === 'left'
-      ? leftClasses
-      : direction === 'right'
-      ? rightClasses
-      : direction === 'top'
-      ? topClasses
-      : bottomClasses;
-
   return (
     <div
-      className={`${classes} box-content absolute bg-clip-content active:bg-blue-700 active:dark:bg-blue-600`}
+      className={clsx(
+        'absolute box-content bg-clip-content active:bg-blue-700 active:dark:bg-blue-600',
+        {
+          right: '-right-2 top-0 h-full w-1 cursor-ew-resize px-1',
+          left: '-left-2 top-0 h-full w-1 cursor-ew-resize px-1',
+          top: '-top-2 left-0 h-1 w-full cursor-ns-resize py-1',
+          bottom: '-bottom-2 left-0 h-1 w-full cursor-ns-resize py-1',
+        }[direction],
+      )}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerMove={handlePointerMove}

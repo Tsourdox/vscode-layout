@@ -27,13 +27,13 @@ export default function Sidebar() {
   const handleResize = (width: number) => {
     setDrawerWidth(width);
     setIsDrawerOpen(
-      (isOpen) => (isOpen && width !== 0) || (!isOpen && width > 0)
+      (isOpen) => (isOpen && width !== 0) || (!isOpen && width > 0),
     );
   };
 
   return (
     <>
-      <aside className="flex flex-col overflow-y-auto border-r-1 bg-neutral-100 border-neutral-300 dark:bg-neutral-900 dark:border-neutral-700">
+      <aside className="border-r-1 flex flex-col overflow-y-auto border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900">
         <SidebarIcon
           icon={<DocumentDuplicateIcon />}
           isActive={isDrawerOpen}

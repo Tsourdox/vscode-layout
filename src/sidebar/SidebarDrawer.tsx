@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { ReactNode } from 'react';
 import DraggableEdge from './DraggableEdge';
 
@@ -22,9 +23,10 @@ export default function SidebarDrawer({
     <aside className="relative flex">
       <div
         style={{ width: `${isOpen ? width : 0}px` }}
-        className={`flex flex-col overflow-hidden dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-900 ${
-          isOpen && 'border-r-1 border-neutral-300 dark:border-neutral-700'
-        }`}
+        className={clsx(
+          'flex flex-col overflow-hidden bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-300',
+          isOpen && 'border-r-1 border-neutral-300 dark:border-neutral-700',
+        )}
       >
         {children}
       </div>
