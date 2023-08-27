@@ -16,7 +16,7 @@ interface Props {
   minSize: number;
   isFoldable?: boolean;
   endMargin: number;
-  value: number;
+  position: number;
   onDrag: (value: number) => void;
 }
 
@@ -27,7 +27,7 @@ export default function DragEdge({
   minSize,
   isFoldable,
   endMargin,
-  value,
+  position,
   onDrag,
 }: Props) {
   const [isDragging, setIsDragging] = useState(false);
@@ -44,12 +44,12 @@ export default function DragEdge({
 
   useEffect(() => {
     const handleResize = () => {
-      onDrag(clip(value, minSize, getMax()));
+      onDrag(clip(position, minSize, getMax()));
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [getMax, minSize, onDrag, value]);
+  }, [getMax, minSize, onDrag, position]);
 
   const disableSelect = useCallback((e: Event) => e.preventDefault(), []);
 
@@ -84,6 +84,8 @@ export default function DragEdge({
     const offset = mirroredRect[side];
     const absolutePointerPosition = isHorizontal ? e.clientX : e.clientY;
     const relativeCursorPosition = absolutePointerPosition - offset;
+
+    if (relativeCursorPosition === position) return;
 
     if (isFoldable && relativeCursorPosition < minSize / 2) {
       onDrag(0);

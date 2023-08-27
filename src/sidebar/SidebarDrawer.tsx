@@ -37,7 +37,7 @@ export default function SidebarDrawer({
         minSize={250}
         endMargin={500} // Sidebar + main content width
         // TODO should be calculated based on the width of the sidebar and main content
-        value={width}
+        position={width}
         onDrag={onResize}
       />
     </aside>
