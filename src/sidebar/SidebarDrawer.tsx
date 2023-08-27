@@ -31,7 +31,7 @@ export default function SidebarDrawer({
       <DraggableEdge
         isOpen={isOpen}
         direction="right"
-        foldLimit={MIN_WIDTH / 2}
+        foldLimit={MIN_WIDTH / 4}
         minSize={MIN_WIDTH}
         endMargin={OTHER_CONTENT_WIDTH}
         value={width}
