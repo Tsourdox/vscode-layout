@@ -1,0 +1,15 @@
+{
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "headwind.runOnSave": false,
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["[sS]tyle \\=([^;]*);", "'([^']*)'"],
+    ["[sS]tyle \\=([^;]*);", "\"([^\"]*)\""],
+    ["[sS]tyle \\=([^;]*);", "\\`([^\\`]*)\\`"]
+  ]
+}
