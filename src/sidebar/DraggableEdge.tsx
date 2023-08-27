@@ -12,9 +12,9 @@ import { clip } from '../utils';
 interface Props {
   containerRef: RefObject<HTMLDivElement>;
   isOpen: boolean;
-  direction: 'left' | 'right' | 'top' | 'bottom';
+  side: 'left' | 'right' | 'top' | 'bottom';
   minSize: number;
-  foldLimit?: number;
+  isFoldable?: boolean;
   endMargin: number;
   value: number;
   onDrag: (value: number) => void;
@@ -23,9 +23,9 @@ interface Props {
 export default function DragEdge({
   containerRef,
   isOpen,
-  direction,
+  side,
   minSize,
-  foldLimit,
+  isFoldable,
   endMargin,
   value,
   onDrag,
@@ -33,8 +33,8 @@ export default function DragEdge({
   const [isDragging, setIsDragging] = useState(false);
 
   const isHorizontal = useMemo(
-    () => direction === 'left' || direction === 'right',
-    [direction],
+    () => side === 'left' || side === 'right',
+    [side],
   );
 
   const getMax = useCallback(
@@ -74,22 +74,18 @@ export default function DragEdge({
 
     const containerRect = containerRef.current.getBoundingClientRect();
 
-    const opositeSides = {
+    const mirroredRect = {
       left: containerRect.right,
       right: containerRect.left,
       top: containerRect.bottom,
       bottom: containerRect.top,
     };
 
-    const offset = opositeSides[direction];
+    const offset = mirroredRect[side];
     const absolutePointerPosition = isHorizontal ? e.clientX : e.clientY;
     const relativeCursorPosition = absolutePointerPosition - offset;
 
-    if (
-      foldLimit &&
-      ((isOpen && relativeCursorPosition < foldLimit) ||
-        (!isOpen && relativeCursorPosition < minSize - foldLimit))
-    ) {
+    if (isFoldable && relativeCursorPosition < minSize / 2) {
       onDrag(0);
     } else {
       onDrag(clip(relativeCursorPosition, minSize, getMax()));
@@ -105,7 +101,7 @@ export default function DragEdge({
           left: '-left-2 top-0 h-full w-1 cursor-ew-resize px-1',
           top: '-top-2 left-0 h-1 w-full cursor-ns-resize py-1',
           bottom: '-bottom-2 left-0 h-1 w-full cursor-ns-resize py-1',
-        }[direction],
+        }[side],
       )}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}

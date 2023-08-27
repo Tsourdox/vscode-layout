@@ -9,10 +9,6 @@ interface Props {
   children: ReactNode;
 }
 
-const MIN_WIDTH = 250;
-const OTHER_CONTENT_WIDTH = 500; // Sidebar + main content width
-// TODO should be calculated based on the width of the sidebar and main content
-
 export default function SidebarDrawer({
   isOpen,
   width,
@@ -36,10 +32,11 @@ export default function SidebarDrawer({
       <DraggableEdge
         containerRef={containerRef}
         isOpen={isOpen}
-        direction="right"
-        foldLimit={MIN_WIDTH / 4}
-        minSize={MIN_WIDTH}
-        endMargin={OTHER_CONTENT_WIDTH}
+        side="right"
+        isFoldable={true}
+        minSize={250}
+        endMargin={500} // Sidebar + main content width
+        // TODO should be calculated based on the width of the sidebar and main content
         value={width}
         onDrag={onResize}
       />
