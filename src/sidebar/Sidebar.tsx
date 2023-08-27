@@ -25,12 +25,10 @@ export default function Sidebar() {
   };
 
   const handleResize = (width: number) => {
-    if (isDrawerOpen && width === 0) {
-      setIsDrawerOpen(false);
-    } else if (!isDrawerOpen && width > 0) {
-      setIsDrawerOpen(true);
-    }
     setDrawerWidth(width);
+    setIsDrawerOpen(
+      (isOpen) => (isOpen && width !== 0) || (!isOpen && width > 0)
+    );
   };
 
   return (
