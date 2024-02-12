@@ -3,7 +3,7 @@ import SidebarDrawerAccordion from '../SidebarDrawerAccordion';
 
 export default function Explorer() {
   return (
-    <section className="flex flex-1 flex-col">
+    <section className="flex h-full flex-1 flex-col">
       <header className="flex justify-between px-7 py-4">
         <span>EXPLORER</span>
         <EllipsisHorizontalIcon className="h-6 w-6" />
