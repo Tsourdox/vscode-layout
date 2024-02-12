@@ -18,7 +18,7 @@ export default function SidebarDrawerAccordion({
   return (
     <section
       className={clsx(
-        'flex flex-col overflow-y-auto transition-all',
+        'flex flex-col transition-all',
         isExpanded && 'h-8 flex-1',
         !noDivider && 'border-b-1 border-neutral-300 dark:border-neutral-700',
       )}
