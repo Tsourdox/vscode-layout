@@ -3,6 +3,7 @@ import {
   BellIcon,
   ChatBubbleLeftRightIcon,
   ChevronDoubleRightIcon,
+  ExclamationCircleIcon,
   ExclamationTriangleIcon,
   XCircleIcon,
 } from '@heroicons/react/24/outline';
@@ -18,6 +19,8 @@ export default function Footer() {
         <span>0</span>
         <ExclamationTriangleIcon className="h-6 w-6" />
         <span>0</span>
+        <ExclamationCircleIcon className="h-6 w-6" />
+        <span>2</span>
       </div>
       <div className="flex-1" />
       <div className="flex cursor-pointer items-center px-2">
