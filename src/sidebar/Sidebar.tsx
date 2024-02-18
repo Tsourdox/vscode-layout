@@ -8,17 +8,16 @@ import {
   Squares2X2Icon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { PropsWithChildren, useState } from 'react';
 import SidebarDrawer from './SidebarDrawer';
 import SidebarIcon from './SidebarIcon';
-import Explorer from './drawer-content/Explorer';
 
-export default function Sidebar() {
+export default function Sidebar({ children }: PropsWithChildren) {
   const [drawerWidth, setDrawerWidth] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const handleIconClick = () => {
-    setIsDrawerOpen((isOpen) => !isOpen);
+  const handleToggleDrawer = (open?: true) => {
+    setIsDrawerOpen((isOpen) => open || !isOpen);
     if (!isDrawerOpen && drawerWidth === 0) {
       setDrawerWidth(250);
     }
@@ -35,26 +34,46 @@ export default function Sidebar() {
     <>
       <aside className="border-r-1 flex flex-col overflow-y-auto border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900">
         <SidebarIcon
+          to="/explorer"
           icon={<DocumentDuplicateIcon />}
-          isActive={isDrawerOpen}
-          onClick={handleIconClick}
+          isOpen={isDrawerOpen}
+          onToggle={handleToggleDrawer}
         />
-        <SidebarIcon icon={<MagnifyingGlassIcon />} />
-        <SidebarIcon icon={<ShareIcon />} />
-        <SidebarIcon icon={<PlayIcon />} />
-        <SidebarIcon icon={<Squares2X2Icon />} />
-        <SidebarIcon icon={<EllipsisHorizontalIcon />} />
+        <SidebarIcon
+          to="/search"
+          icon={<MagnifyingGlassIcon />}
+          isOpen={isDrawerOpen}
+          onToggle={handleToggleDrawer}
+        />
+        <SidebarIcon
+          to="/source-control"
+          icon={<ShareIcon />}
+          isOpen={isDrawerOpen}
+          onToggle={handleToggleDrawer}
+        />
+        <SidebarIcon
+          to="/run-and-debug"
+          icon={<PlayIcon />}
+          isOpen={isDrawerOpen}
+          onToggle={handleToggleDrawer}
+        />
+        <SidebarIcon
+          to="/extensions"
+          icon={<Squares2X2Icon />}
+          isOpen={isDrawerOpen}
+          onToggle={handleToggleDrawer}
+        />
+        <SidebarIcon to="" icon={<EllipsisHorizontalIcon />} />
         <div className="flex-1" />
-        <SidebarIcon icon={<UserCircleIcon />} />
-        <SidebarIcon icon={<Cog8ToothIcon />} />
+        <SidebarIcon to="" icon={<UserCircleIcon />} />
+        <SidebarIcon to="" icon={<Cog8ToothIcon />} />
       </aside>
       <SidebarDrawer
         isOpen={isDrawerOpen}
         width={drawerWidth}
         onResize={handleResize}
       >
-        {/* Explorer hard coded for now... */}
-        <Explorer />
+        {children}
       </SidebarDrawer>
     </>
   );

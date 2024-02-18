@@ -1,3 +1,4 @@
+import { Outlet } from 'react-router-dom';
 import Footer from './Footer';
 import Header from './Header';
 import Main from './Main';
@@ -9,7 +10,9 @@ function App() {
       <Header />
 
       <div className="flex h-0 flex-1">
-        <Sidebar />
+        <Sidebar>
+          <Outlet />
+        </Sidebar>
         <Main />
       </div>
 
