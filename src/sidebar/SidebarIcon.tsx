@@ -12,7 +12,7 @@ export default function SidebarIcon({ icon, isActive, onClick }: Props) {
     <div
       onClick={onClick}
       className={clsx(
-        'box-content h-10 w-10 flex-none cursor-pointer border-l-2 border-transparent p-4',
+        'box-content h-10 w-10 flex-none cursor-pointer border-l-2 p-4',
         isActive &&
           'border-blue-700 text-neutral-700 dark:border-blue-600 dark:text-neutral-300',
       )}
